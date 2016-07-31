@@ -2,4 +2,4 @@
 .vagrant/
 
 ### Ansible ###
-.retry
+*.retry

@@ -5,9 +5,12 @@
   ignore_errors: yes
 
 - name: Download SQuirreL
-  unarchive: src={{url}} dest={{temp_install_path}} copy=no
+  get_url: url={{url}} dest={{temp_install_path}}/{{filename}}
   when: squirrelsql_check.rc != 0
 
+- name: Unarchive SQuirreL
+  unarchive: src={{temp_install_path}}/{{filename}} dest={{temp_install_path}} copy=no
+  
 - name: Clean up any SQuirreL
   file: state=absent path={{install_dir}}
   when: squirrelsql_check.rc != 0

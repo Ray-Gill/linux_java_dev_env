@@ -6,3 +6,8 @@
 # Applications want to install shortcuts to Desktop, create it now since it will not be created until GUI is installed and machine is restarted
 - name: Create Desktop directory
   file: path=/home/vagrant/Desktop state=directory owner=vagrant group=vagrant
+  
+## OS SPECIFIC: change this for different distro
+- name: Install unzip
+  yum: name="unzip" state=present
+## END OS SPECIFIC
