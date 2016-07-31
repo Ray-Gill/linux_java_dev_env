@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Chrome
+Comment=Google Chrome Browser
+Exec=/usr/bin/google-chrome
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=/opt/google/chrome/product_logo_64.png

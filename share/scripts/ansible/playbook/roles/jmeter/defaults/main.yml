@@ -1,0 +1,9 @@
+app: jmeter
+version: 3.0
+url: http://mirror.its.dal.ca/apache/jmeter/binaries/apache-jmeter-3.0.tgz
+filename: apache-jmeter-3.0.tgz
+temp_install_path: /usr/local/src
+temp_install_dir: apache-jmeter-3.0
+install_dir: /opt/jmeter
+executable_dir: /opt/jmeter/bin
+executable: jmeter

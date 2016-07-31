@@ -1,0 +1,35 @@
+---
+- name: Check if sublime is installed, only install software if existing version does not match
+  command: ls /home/vagrant/installed_software/{{app}}-{{version}}.txt
+  register: sublime_check
+  ignore_errors: yes
+
+- name: Clean up any Sublime Text 3
+  file: state=absent path={{install_dir}}
+  when: sublime_check.rc != 0
+  
+- name: Download Sublime Text 3
+  unarchive: src={{url}} dest={{temp_install_path}} copy=no
+  when: sublime_check.rc != 0
+
+- name: Move directory
+  command: "mv {{temp_install_path}}/{{temp_install_dir}} {{install_dir}}"  
+  when: sublime_check.rc != 0
+
+- name: Create symbolic link add to /usr/bin
+  file: src={{install_dir}}/{{executable}} dest=/usr/bin/{{app}} owner=root group=root state=link
+  when: sublime_check.rc != 0
+
+- name: Create desktop link for Sublime Text 3
+  copy: src=/home/vagrant/share/files/{{app}}/{{app}}.desktop dest=/home/vagrant/Desktop/{{app}}.desktop owner=vagrant group=vagrant
+  when: sublime_check.rc != 0
+
+- name: Permissions for desktop link for Sublime Text 3
+  file: path=/home/vagrant/Desktop/{{app}}.desktop owner=vagrant group=vagrant mode="u+x,g+x,o+x"
+  when: sublime_check.rc != 0
+
+- name: Set squirrel as installed software
+  shell: echo > /home/vagrant/installed_software/{{app}}-{{version}}.txt
+  args:
+    executable: /bin/bash
+  when: sublime_check.rc != 0

@@ -1,0 +1,8 @@
+app: sublime
+version: 3114
+url: https://download.sublimetext.com/sublime_text_3_build_3114_x64.tar.bz2
+filename: sublime_text_3_build_3114_x64.tar.bz2
+temp_install_path: /usr/local/src
+temp_install_dir: sublime_text_3
+install_dir: /opt/sublime
+executable: sublime_text

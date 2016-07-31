@@ -1,0 +1,54 @@
+---
+- name: Check if java is installed, only install software if existing version does not match
+  command: ls /home/vagrant/installed_software/{{app}}-{{version}}.txt
+  register: java_check
+  ignore_errors: yes
+
+- name: Download Java
+  command: "wget -q -O {{temp_install_dir}}/{{filename}} --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' {{url}} creates={{temp_install_dir}}/{{filename}}"
+  when: java_check.rc != 0
+
+- name: Clean up any Java
+  file: state=absent path={{install_dir}}
+  when: java_check.rc != 0
+  
+- name: Unpack archive
+  unarchive: src={{temp_install_dir}}/{{filename}} dest=/opt/
+  when: java_check.rc != 0
+
+- name: Move directory
+  command: "mv {{default_install_dir}} {{install_dir}}"  
+  when: java_check.rc != 0
+
+- name: Fix ownership
+  file: state=directory path={{install_dir}} owner=root group=root recurse=yes
+  when: java_check.rc != 0
+
+- name: Make Java available for system
+  command: 'alternatives --install "/usr/bin/{{executable}}" "{{executable}}" "/bin/{{executable}}" 2000'
+  when: java_check.rc != 0
+
+- name: Clean up
+  file: state=absent path={{temp_install_dir}}/{{filename}}
+  when: java_check.rc != 0
+
+- name: Setup Java Home Env variables
+  shell: echo JAVA_HOME={{install_dir}} > {{profile_d_dir}}
+  args:
+    executable: /bin/bash
+  when: java_check.rc != 0
+  
+- name: Setup Java on Path Env Variable
+  lineinfile: >
+    dest=/etc/environment
+    state=present
+    backrefs=yes
+    regexp='PATH=(["]*)((?!.*?/{{path_dir}}).*?)(["]*)$'
+    line="PATH=\1\2:{{path_dir}}\3"
+  when: java_check.rc != 0
+
+- name: Set java as installed software
+  shell: echo > /home/vagrant/installed_software/{{app}}-{{version}}.txt
+  args:
+    executable: /bin/bash
+  when: java_check.rc != 0

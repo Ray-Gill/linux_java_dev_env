@@ -1,0 +1,17 @@
+---
+- name: Check if git is installed, only install software if existing version does not match
+  command: ls /home/vagrant/installed_software/{{app}}-{{version}}.txt
+  register: git_check
+  ignore_errors: yes
+
+## OS SPECIFIC: change this for different distro
+- name: Install Git
+  yum: name="{{app}}-{{version}}" state=present
+  when: git_check.rc != 0
+## END OS SPECIFIC
+
+- name: Set git as installed software
+  shell: echo > /home/vagrant/installed_software/{{app}}-{{version}}.txt
+  args:
+    executable: /bin/bash
+  when: git_check.rc != 0

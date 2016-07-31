@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=SQuirreL
+Comment=SQuirreL SQL Client
+Exec=sh /usr/bin/squirrel-sql.sh
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=/opt/squirrelsql/icons/acorn.png

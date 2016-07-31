@@ -1,0 +1,6 @@
+app: eclipse
+version: neon
+url: http://mirror.cc.columbia.edu/pub/software/eclipse/technology/epp/downloads/release/neon/R/eclipse-jee-neon-R-linux-gtk-x86_64.tar.gz
+temp_install_dir: /usr/local/src
+install_dir: /opt/eclipse
+executable: eclipse

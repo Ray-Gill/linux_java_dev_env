@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Eclipse
+Comment=Eclipse IDE
+Exec=/usr/bin/eclipse
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=/opt/eclipse/icon.xpm

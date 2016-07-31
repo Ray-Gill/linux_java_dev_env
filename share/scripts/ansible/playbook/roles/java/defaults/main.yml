@@ -1,0 +1,10 @@
+app: java
+version: 1.8.0_05
+url: http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz
+filename: jdk-8u5-linux-x64.tar.gz
+temp_install_dir: /usr/local/src
+default_install_dir: /opt/jdk1.8.0_05
+install_dir: /opt/java
+executable: java
+profile_d_dir: /etc/profile.d/java.sh
+path_dir: /opt/java/bin

@@ -1,0 +1,13 @@
+Creating Vagrant CentOS
+
+1.  Download Vagrant
+2.  Download VirtualBox	
+3.  Make a directory somewhere (ie. c:\dev\vagrant-centos)
+4.  Initialize vagrant: vagrant init centos/7
+5.  Edit VagrantFile for any desired configurations
+	ie. execute shell script, configure RAM, enable GUI
+6. Vagrant plugin install vagrant-vbguest
+7.  Shell Script triggered in Vagrant to install Ansible
+8.  Ansible playboos to install GUI, Java, etc.
+9.  vagrant provision: command to rerun configurations
+10.  Continuously commit to Git

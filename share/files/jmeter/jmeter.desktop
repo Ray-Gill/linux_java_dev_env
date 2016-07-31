@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=JMeter
+Comment=JMeter
+Exec=sh /usr/bin/jmeter
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=/opt/jmeter/docs/images/jmeter_square.png
