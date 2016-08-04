@@ -1,20 +1,17 @@
 ---
-- name: Check if node is installed, only install software if existing version does not match
-  command: ls /home/vagrant/installed_software/{{app}}-{{version}}.txt
+- name: Find if Node previously downloaded
+  stat: path={{temp_install_dir}}/{{filename}}
   register: node_check
-  ignore_errors: yes
-
-- name: Clean up any node
-  file: state=absent path={{temp_install_path}}/{{temp_install_dir}}
-  when: node_check.rc != 0
   
 - name: Download Node
-  unarchive: src={{url}} dest={{temp_install_path}} copy=no
-  when: node_check.rc != 0
+  get_url: url={{url}} dest={{temp_install_path}}
+  when: node_check.stat.exists == False
+  
+- name: Unarchive
+  unarchive: src={{temp_install_path}}/{{filename}} dest={{temp_install_path}} copy=no
 
 - name: Move directory
   command: "mv {{temp_install_path}}/{{temp_install_dir}} {{install_dir}}"  
-  when: node_check.rc != 0
   
 - name: Setup Node and NPM in Path Env variable
   lineinfile: >
@@ -23,10 +20,3 @@
     backrefs=yes
     regexp='PATH=(["]*)((?!.*?{{path_dir}}).*?)(["]*)$'
     line="PATH=\1\2:{{path_dir}}\3"
-  when: node_check.rc != 0
-
-- name: Set node as installed software
-  shell: echo > /home/vagrant/installed_software/{{app}}-{{version}}.txt
-  args:
-    executable: /bin/bash
-  when: node_check.rc != 0

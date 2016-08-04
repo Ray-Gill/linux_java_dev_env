@@ -1,6 +1,7 @@
 app: node
 version: v4.4.7-linux-x64
 url: https://nodejs.org/dist/v4.4.7/node-v4.4.7-linux-x64.tar.xz
+filename: node-v4.4.7-linux-x64.tar.xz
 temp_install_path: /usr/local/src
 temp_install_dir: node-v4.4.7-linux-x64
 install_dir: /opt/node

@@ -1,8 +1,4 @@
 ---
-# Create directory where installed software will reside
-- name: Create installed sofware directory
-  file: path=/home/vagrant/installed_software state=directory owner=vagrant group=vagrant
-
 # Applications want to install shortcuts to Desktop, create it now since it will not be created until GUI is installed and machine is restarted
 - name: Create Desktop directory
   file: path=/home/vagrant/Desktop state=directory owner=vagrant group=vagrant
