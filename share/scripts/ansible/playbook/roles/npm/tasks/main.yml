@@ -1,6 +1,6 @@
 ---
 - name: Find if Node previously downloaded
-  stat: path={{temp_install_dir}}/{{filename}}
+  stat: path={{temp_install_path}}/{{filename}}
   register: node_check
   
 - name: Download Node
@@ -9,6 +9,9 @@
   
 - name: Unarchive
   unarchive: src={{temp_install_path}}/{{filename}} dest={{temp_install_path}} copy=no
+
+- name: Clean up any Node
+  file: state=absent path={{install_dir}}
 
 - name: Move directory
   command: "mv {{temp_install_path}}/{{temp_install_dir}} {{install_dir}}"  
