@@ -4,15 +4,15 @@
   become_user: root
 
   roles:
+    - setup
+    - java
+    - maven
+    - npm
+    - git
+    - sublime
+    - eclipse
+    - squirrelsql
+    - jmeter
+    - chrome
     - docker
-    #- setup
-    #- java
-    #- maven
-    #- npm
-    #- git
-    #- sublime
-    #- eclipse
-    #- squirrelsql
-    #- jmeter
-    #- chrome
-    #- gui
+    - gui

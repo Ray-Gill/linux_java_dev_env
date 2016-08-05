@@ -7,10 +7,10 @@ set -o pipefail
 echo "PATH=$PATH" > /etc/environment
 
 ## OS SPECIFIC: change this for different distro
-#echo "Add Ansible RPM"
-#rpm -iUvh --replacepkgs https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-#echo "Install Ansible"
-#yum -y install ansible-2.1.0.0
+echo "Add Ansible RPM"
+rpm -iUvh --replacepkgs https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+echo "Install Ansible"
+yum -y install ansible-2.1.0.0
 ## END OS SPECIFIC
 
 echo "Run Ansible playbook"

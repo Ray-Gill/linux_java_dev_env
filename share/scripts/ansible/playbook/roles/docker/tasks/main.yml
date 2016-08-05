@@ -2,31 +2,34 @@
 - name: Find if Docker previously downloaded
   stat: path={{temp_install_path}}/{{filename}}
   register: docker_check
-  
+
 - name: Download Docker
   get_url: url={{url}} dest={{temp_install_path}}
   when: docker_check.stat.exists == False
-  
+
 - name: Unarchive
   unarchive: src={{temp_install_path}}/{{filename}} dest={{temp_install_path}} copy=no
 
-- name: Clean up any Docker
-  file: state=absent path={{install_dir}}
-
-- name: Move directory
-  command: "mv {{temp_install_path}}/{{temp_install_dir}} {{install_dir}}"  
-  
-- name: Setup Docker in Path Env variable
-  lineinfile: >
-    dest=/etc/environment
-    state=present
-    backrefs=yes
-    regexp='PATH=(["]*)((?!.*?{{install_dir}}).*?)(["]*)$'
-    line="PATH=\1\2:{{install_dir}}\3"
-
-- name: Stop any Docker service
-  command: "{{install_dir}}/docker kill $(docker ps -q)"  
+- name: Stop any Docker service (if any)
+  shell: pkill -f docker*
+  args:
+    executable: /bin/bash
   ignore_errors: yes
 
+- name: Clean up any Docker
+  shell: rm -fr {{install_dir}}/docker*
+  args:
+    executable: /bin/bash
+
+- name: Move Docker executables to location where service can be run
+  shell: mv {{temp_install_path}}/{{temp_install_dir}}/* {{install_dir}}/
+  args:
+    executable: /bin/bash
+
+- name: Clean up Docker expanded directory
+  file: state=absent path={{temp_install_path}}/{install_dir}}
+
 - name: Start Docker service
-  command: "{{install_dir}}/dockerd &"
+  shell: dockerd &
+  args:
+    executable: /bin/bash
