@@ -1,43 +1,29 @@
 ---
-- name: Check if jmeter is installed, only install software if existing version does not match
-  command: ls /home/vagrant/installed_software/{{app}}-{{version}}.txt
+- name: Find if JMeter previously downloaded
+  stat: path={{temp_install_path}}/{{filename}}
   register: jmeter_check
-  ignore_errors: yes
-
+  
 - name: Download JMeter
-  unarchive: src={{url}} dest={{temp_install_path}} copy=no
-  when: jmeter_check.rc != 0
+  get_url: url={{url}} dest={{temp_install_path}}/{{filename}}
+  when: jmeter_check.stat.exists == False
+
+- name: Unarchive JMeter
+  unarchive: src={{temp_install_path}}/{{filename}} dest={{temp_install_path}} copy=no
 
 - name: Clean up any JMeter
   file: state=absent path={{install_dir}}
-  when: jmeter_check.rc != 0
 
 - name: Move directory
   command: "mv {{temp_install_path}}/{{temp_install_dir}} {{install_dir}}"  
-  when: jmeter_check.rc != 0
 
 - name: Fix ownership
   file: state=directory path={{install_dir}} owner=root group=root recurse=yes
-  when: jmeter_check.rc != 0
-
-- name: Clean up
-  file: state=absent path={{temp_install_path}}/{{filename}}
-  when: jmeter_check.rc != 0
 
 - name: Create symbolic link add to /usr/bin
   file: src={{executable_dir}}/{{executable}} dest=/usr/bin/{{executable}} owner=root group=root state=link
-  when: jmeter_check.rc != 0
 
 - name: Create desktop link for JMeter
   copy: src=/home/vagrant/share/files/{{app}}/{{app}}.desktop dest=/home/vagrant/Desktop/{{app}}.desktop owner=vagrant group=vagrant
-  when: jmeter_check.rc != 0
 
 - name: Permissions for desktop link for JMeter
   file: path=/home/vagrant/Desktop/{{app}}.desktop owner=vagrant group=vagrant mode="u+x,g+x,o+x"
-  when: jmeter_check.rc != 0
-
-- name: Set jmeter as installed software
-  shell: echo > /home/vagrant/installed_software/{{app}}-{{version}}.txt
-  args:
-    executable: /bin/bash
-  when: jmeter_check.rc != 0

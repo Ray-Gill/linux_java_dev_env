@@ -1,30 +1,15 @@
 ---
-- name: Check if chome is installed, only install software if existing version does not match
-  command: ls /home/vagrant/installed_software/{{app}}.txt
-  register: chrome_check
-  ignore_errors: yes
-
 # Source: https://github.com/sheldonh/dotfiles-ansible/blob/master/
 ## OS SPECIFIC: change this for different distro
 - name: Enable Yum repo for Google Chrome
   copy: src=/home/vagrant/share/files/{{app}}/google-chrome.repo dest=/etc/yum.repos.d/google-chrome.repo
-  when: chrome_check.rc != 0
 
 - name: Install Google Chrome
   yum: name=google-chrome-stable state=present
 ## END OS SPECIFIC
-  when: chrome_check.rc != 0
 
 - name: Create desktop link for Chrome
   copy: src=/home/vagrant/share/files/{{app}}/{{app}}.desktop dest=/home/vagrant/Desktop/{{app}}.desktop owner=vagrant group=vagrant
-  when: chrome_check.rc != 0
 
 - name: Permissions for desktop link for Chrome
   file: path=/home/vagrant/Desktop/{{app}}.desktop owner=vagrant group=vagrant mode="u+x,g+x,o+x"
-  when: chrome_check.rc != 0
-
-- name: Set chrome as installed software
-  shell: echo > /home/vagrant/installed_software/{{app}}.txt
-  args:
-    executable: /bin/bash
-  when: chrome_check.rc != 0

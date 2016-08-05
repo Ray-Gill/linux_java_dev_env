@@ -1,21 +1,8 @@
 ---
-- name: Check if gui is installed, only install software if existing version does not match
-  command: ls /home/vagrant/installed_software/{{app}}-{{version}}.txt
-  register: gui_check
-  ignore_errors: yes
-
 ## OS SPECIFIC: change this for different distro
 - name: install the 'Gnome desktop' environment group
   yum: name="@^gnome-desktop-environment" state=present
 ## END OS SPECIFIC
-  when: gui_check.rc != 0
 
 - name: Set Run Level for GUI
   file: src=/lib/systemd/system/runlevel5.target dest=/etc/systemd/system/default.target state=link
-  when: gui_check.rc != 0
-
-- name: Set gui as installed software
-  shell: echo > /home/vagrant/installed_software/{{app}}-{{version}}.txt
-  args:
-    executable: /bin/bash
-  when: gui_check.rc != 0

@@ -1,50 +1,37 @@
 ---
-- name: Check if maven is installed, only install software if existing version does not match
-  command: ls /home/vagrant/installed_software/{{app}}-{{version}}.txt
+- name: Find if Maven previously downloaded
+  stat: path={{temp_install_dir}}/{{filename}}
   register: maven_check
-  ignore_errors: yes
   
 - name: Download Maven
   get_url: url={{url}} dest={{temp_install_path}}
-  when: maven_check.rc != 0
-  
-- name: Clean up any maven
-  file: state=absent path={{install_dir}}
-  when: maven_check.rc != 0
+  when: maven_check.stat.exists == False
   
 - name: Unarchive
   unarchive: src={{temp_install_path}}/{{filename}} dest={{temp_install_path}} copy=no
-  when: maven_check.rc != 0
 
-- name: Clean up binary
-  file: state=absent path={{temp_install_path}}/{{filename}}
-  when: maven_check.rc != 0
+- name: Clean up any maven
+  file: state=absent path={{install_dir}}
   
 - name: Move directory
   command: "mv {{temp_install_path}}/{{temp_install_dir}} {{install_dir}}"  
-  when: maven_check.rc != 0
 
 - name: Fix ownership
   file: state=directory path={{install_dir}} owner=root group=root recurse=yes
-  when: maven_check.rc != 0
 
 - name: Setup Maven Home Env variable
   shell: echo M2_HOME={{install_dir}} > {{profile_d_dir}}
   args:
     executable: /bin/bash
-  when: maven_check.rc != 0
   
 - name: ldconfig
   command: "ldconfig"
-  when: maven_check.rc != 0
 
 - name: make m2 directory
   file: path={{m2_dir}} state=directory owner=vagrant group=vagrant recurse=yes
-  when: maven_check.rc != 0
   
 - name: remove maven setting files
   file: state=absent path={{m2_dir}}/settings.xml
-  when: maven_check.rc != 0
   
 - name: Setup maven in Path Env variable
   lineinfile: >
@@ -53,10 +40,3 @@
     backrefs=yes
     regexp='PATH=(["]*)((?!.*?{{path_dir}}).*?)(["]*)$'
     line="PATH=\1\2:{{path_dir}}\3"
-  when: maven_check.rc != 0
-
-- name: Set maven as installed software
-  shell: echo > /home/vagrant/installed_software/{{app}}-{{version}}.txt
-  args:
-    executable: /bin/bash
-  when: maven_check.rc != 0
