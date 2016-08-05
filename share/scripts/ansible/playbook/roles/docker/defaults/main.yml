@@ -1,0 +1,7 @@
+app: docker
+version: 1.12.0
+url: https://get.docker.com/builds/Linux/x86_64/docker-1.12.0.tgz
+filename: docker-1.12.0.tgz
+temp_install_path: /usr/local/src
+temp_install_dir: docker
+install_dir: /usr/bin
