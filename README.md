@@ -26,8 +26,10 @@ Root Password: vagrant
 	
 # Troubleshooting
 Issue: Failure during one of the stages of installing / updating software
+
 Resolution:
     vagrant provision
+
 Note: need to have VM running via "vagrant up" before trying a "vagrant provision"
 
 # Changing Linux Distribution
