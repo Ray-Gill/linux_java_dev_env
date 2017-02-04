@@ -10,7 +10,7 @@ echo "PATH=$PATH" > /etc/environment
 echo "Add Ansible RPM"
 rpm -iUvh --replacepkgs https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 echo "Install Ansible"
-yum -y install ansible-2.1.0.0
+yum -y install ansible
 ## END OS SPECIFIC
 
 echo "Run Ansible playbook"
