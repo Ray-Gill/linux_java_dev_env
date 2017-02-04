@@ -47,11 +47,14 @@ Vagrant.configure(2) do |config|
   # Example for VirtualBox:
   #
   config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
+    # Display the VirtualBox GUI when booting the machine
     vb.gui = true
+    # RAM
+    vb.memory = "8192"
+    # Display settings, such as Video RAM and 3D acceleration
+    vb.customize ["modifyvm", :id, "--vram", "32"]
+    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
   #
-  #   # Customize the amount of memory on the VM:
-    vb.memory = "4096"
   end
   #
   # View the documentation for the provider you are using for more
